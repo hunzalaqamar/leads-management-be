@@ -52,9 +52,17 @@ public class LeadService {
         }).collect(Collectors.toList());
     }
 
+
     public void deleteLeads(List<Integer> leadIds) {
-        // Since there's no user association, fetch leads by IDs directly
+        if (leadIds == null || leadIds.isEmpty()) {
+            throw new IllegalArgumentException("Lead IDs cannot be empty");
+        }
+
         List<Lead> leadsToDelete = leadRepository.findAllById(leadIds);
-        leadRepository.deleteAll(leadsToDelete);
+        if (leadsToDelete.isEmpty()) {
+            throw new IllegalArgumentException("No leads found with the provided IDs: " + leadIds);
+        }
+
+        leadRepository.deleteAllById(leadIds);
     }
 }

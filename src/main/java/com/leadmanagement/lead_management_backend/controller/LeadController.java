@@ -37,7 +37,7 @@ public class LeadController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ApiResponseDTO<String>> deleteLeads(@RequestBody List<Long> leadIds) {
+    public ResponseEntity<ApiResponseDTO<String>> deleteLeads(@RequestBody List<Integer> leadIds) {
         try {
             leadService.deleteLeads(leadIds);
             return ResponseEntity.ok(new ApiResponseDTO<>(true, "Leads deleted successfully", null));

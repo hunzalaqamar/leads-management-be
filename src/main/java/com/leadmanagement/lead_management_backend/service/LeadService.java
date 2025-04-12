@@ -38,10 +38,7 @@ public class LeadService {
     }
 
     public List<LeadDTO> getLeads() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
-        List<Lead> leads = leadRepository.findByUserId(user.getId());
+        List<Lead> leads = leadRepository.findAll();
         return leads.stream().map(lead -> {
             LeadDTO dto = new LeadDTO();
             dto.setId(lead.getId());
@@ -55,14 +52,9 @@ public class LeadService {
         }).collect(Collectors.toList());
     }
 
-    public void deleteLeads(List<Long> leadIds) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
-        List<Lead> leads = leadRepository.findByUserId(user.getId());
-        List<Lead> leadsToDelete = leads.stream()
-                .filter(lead -> leadIds.contains(lead.getId()))
-                .collect(Collectors.toList());
+    public void deleteLeads(List<Integer> leadIds) {
+        // Since there's no user association, fetch leads by IDs directly
+        List<Lead> leadsToDelete = leadRepository.findAllById(leadIds);
         leadRepository.deleteAll(leadsToDelete);
     }
 }

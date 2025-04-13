@@ -1,20 +1,21 @@
-
 services:
-  mysql:
-    image: mysql:8
-    container_name: lead-mysql
+  postgres:
+    image: postgres:15
+    container_name: lead-postgres
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: lead_management_db
     ports:
-      - "${MYSQL_PORT}:3306"
+      - "5432:5432"
     volumes:
-      - mysql-data:/var/lib/mysql
+      - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d lead_management_db"]
       interval: 10s
       timeout: 5s
       retries: 3
+    restart: unless-stopped
 
 volumes:
-  mysql-data:
+  postgres-data:

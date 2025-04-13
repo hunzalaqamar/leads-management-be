@@ -17,21 +17,21 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @Column(name = "hashed_password")
-    private String hashedPassword;
+    @Column(name = "password")
+    private String password;
 
     public User() {
         this.id = -1;
         this.name = "";
         this.email = "";
-        this.hashedPassword = "";
+        this.password = "";
     }
 
-    public User(Integer id, String name, String email, String hashedPassword, List<Lead> leads) {
+    public User(Integer id, String name, String email, String password, List<Lead> leads) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.hashedPassword = hashedPassword;
+        this.password = password;
     }
 
     public Integer getId() {
@@ -59,10 +59,10 @@ public class User {
     }
 
     public String getHashedPassword() {
-        return hashedPassword;
+        return password;
     }
 
-    public void setHashedPassword(String hashedPassword) {
-        this.hashedPassword = hashedPassword;
+    public void setHashedPassword(String password) {
+        this.password = password;
     }
 }

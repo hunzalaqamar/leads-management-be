@@ -1,11 +1,28 @@
-# Stage 1: Build the app
-FROM maven:3.9.6-eclipse-temurin-21 AS build
-WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
+# Use a JDK base image
+FROM eclipse-temurin:21-jdk AS builder
 
-# Stage 2: Run the app
-FROM openjdk:24-slim-bullseye
+WORKDIR /app
+
+# Install Maven manually OR use image with Maven pre-installed
+RUN apt-get update && apt-get install -y maven
+
+# Copy project files
+COPY . .
+
+# Make mvnw executable if using wrapper (Optional)
+RUN chmod +x mvnw
+
+# Use mvnw if present, fallback to global mvn
+RUN ./mvnw clean install -DskipTests || mvn clean install -DskipTests
+
+# ────────────────────────────────
+# Final runtime image
+FROM eclipse-temurin:21-jdk
+
+WORKDIR /app
+
+COPY --from=builder /app/target/*.jar app.jar
+
 EXPOSE 8080
-COPY --from=build /app/target/*.jar /app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+
+CMD ["java", "-Dserver.port=8080", "-jar", "app.jar"]

@@ -2,11 +2,9 @@ package com.leadmanagement.lead_management_backend.service;
 
 import com.leadmanagement.lead_management_backend.dto.LeadDTO;
 import com.leadmanagement.lead_management_backend.entity.Lead;
-import com.leadmanagement.lead_management_backend.entity.User;
 import com.leadmanagement.lead_management_backend.repository.LeadRepository;
 import com.leadmanagement.lead_management_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

@@ -1,27 +1,16 @@
-# Use a JDK base image
-FROM eclipse-temurin:21-jdk AS builder
+FROM maven:3.9.5-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-# Install Maven manually OR use image with Maven pre-installed
-RUN apt-get update && apt-get install -y maven
-
-# Copy project files
 COPY . .
 
-# Make mvnw executable if using wrapper (Optional)
-RUN chmod +x mvnw
-
-# Use mvnw if present, fallback to global mvn
 RUN ./mvnw clean install -DskipTests || mvn clean install -DskipTests
 
-# ────────────────────────────────
-# Final runtime image
-FROM eclipse-temurin:21-jdk
+FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-COPY --from=builder /app/target/*.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
 
